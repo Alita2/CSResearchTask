@@ -315,7 +315,7 @@ public class CycleSortPane extends Pane {
                         while (Integer.parseInt(texty.getText()) == Integer.parseInt(text[smaller2[0]].getText())) {
                             smaller2[0]++;
                         }
-                        explain1.setText("The number of numbers here <= "+array[smaller2[0]]+" is: "+(smaller2[0]-b-1));
+                        explain1.setText("The number of numbers here <= "+array[smaller2[0]]+" is: "+(smaller2[0]-b));
                         explain1.setWrappingWidth(120);
                         explain1.setX(Math.floor(width/n)*(((double) b)+((double)(n-b+1))/2.0)-60);
                         explain2.setText("Swap values with the element at index start+smaller = "+""+b+"+"+(smaller2[0])+"="+(smaller2[0]+b));
