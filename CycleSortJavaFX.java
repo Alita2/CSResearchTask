@@ -19,6 +19,7 @@ import javafx.stage.Stage;
 import java.util.Random;
 
 public class CycleSortJavaFX extends Application {
+    static Button previous,next,play,random;
         @Override
         public void start(Stage stage) throws Exception {
 
@@ -65,29 +66,33 @@ public class CycleSortJavaFX extends Application {
             BorderPane borderPane = new BorderPane();
             CycleSortPane cycleSortPane= new CycleSortPane();
             HBox hBox = new HBox();
-            Button previous = new Button("<");
+            previous = new Button("<");
             int buttonWidth= (int) Screen.getPrimary().getVisualBounds().getWidth()/25;
             int buttonHeight = (int) Screen.getPrimary().getVisualBounds().getHeight()/15;
             previous.setMinSize(buttonWidth, buttonHeight);
             previous.setPrefSize(buttonWidth, buttonHeight);
             previous.setMaxSize(buttonWidth, buttonHeight);
             previous.setStyle(String.format("-fx-font-size: %dpx;", (int)(0.3 * buttonHeight)));
-            Button next = new Button(">");
+            next = new Button(">");
             next.setMinSize(buttonWidth, buttonHeight);
             next.setPrefSize(buttonWidth, buttonHeight);
             next.setMaxSize(buttonWidth, buttonHeight);
             next.setStyle(String.format("-fx-font-size: %dpx;", (int)(0.3 * buttonHeight)));
-            Button play = new Button("Play");
+            play = new Button("Play");
             play.setMinSize(buttonWidth*1.5, buttonHeight);
             play.setPrefSize(buttonWidth*1.5, buttonHeight);
             play.setMaxSize(buttonWidth*1.5, buttonHeight);
             play.setStyle(String.format("-fx-font-size: %dpx;", (int)(0.3 * buttonHeight)));
-            Button random = new Button("Random");
+            random = new Button("Random");
             random.setMinSize(buttonWidth*2, buttonHeight);
             random.setPrefSize(buttonWidth*2, buttonHeight);
             random.setMaxSize(buttonWidth*2, buttonHeight);
             random.setStyle(String.format("-fx-font-size: %dpx;", (int)(0.3 * buttonHeight)));
             play.setOnAction(e -> {
+                play.setDisable(true);
+                random.setDisable(true);
+                previous.setDisable(true);
+                next.setDisable(true);
                 try {
                     cycleSortPane.play(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
                 } catch (InterruptedException e1) {
@@ -127,6 +132,12 @@ public class CycleSortJavaFX extends Application {
                     .forEach(div ->  div.setMouseTransparent(true) );
                     */
             cycleSortPane.show(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
+        }
+        static void enableButtons(){
+            play.setDisable(false);
+            random.setDisable(false);
+            previous.setDisable(false);
+            next.setDisable(false);
         }
 
         public static void main(String[] args) {

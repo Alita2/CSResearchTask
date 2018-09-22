@@ -12,6 +12,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
+import com.company.CycleSortJavaFX;
 
 public class CycleSortPane extends Pane {
     Integer[] array = new Integer[99];
@@ -30,7 +31,21 @@ public class CycleSortPane extends Pane {
     Text explain2 = new Text();
     int smaller=0;
     public void set(Integer[] a){
+        array = new Integer[99];
+        array2 = new Integer[99];
+        line = new Line();
+        leftTop = new Line();
+        leftBottom = new Line();
+        rightTop=new Line();
+        rightBottom = new Line();
         n=0;
+        starty=new Text();
+        numbering = new Text[99];
+        rectangles = new Rectangle[99];
+        text = new Text[99];
+        explain1 = new Text();
+        explain2 = new Text();
+        smaller=0;
         for(int i=0;i<a.length && a[i]!=null;i++){
             array[i]=a[i];
             array2[i]=a[i];
@@ -178,7 +193,7 @@ public class CycleSortPane extends Pane {
                     explain1.setText("The number of numbers here <= "+array[smaller2[0]]+" is: "+(smaller2[0]-b));
                     explain1.setWrappingWidth(110);
                     explain1.setX(Math.floor(width/n)*(((double) b)+((double)(n-b+1))/2.0)-60);
-                    explain2.setText("Swap values with the element at index start+smaller = "+""+b+"+"+(smaller2[0])+"+"+1+"="+(smaller2[0]+b));
+                    explain2.setText("Swap values with the element at index start+smaller = "+""+b+"+"+(smaller2[0])+"="+(smaller2[0]+b));
                     explain2.setY(height/2-102);
                     explain2.setX(0);
                 });
@@ -335,5 +350,9 @@ public class CycleSortPane extends Pane {
                 sequentialTransition.getChildren().add(parallelTransitions[i]);
             }
         sequentialTransition.play();
+            sequentialTransition.setOnFinished(e->{
+                CycleSortJavaFX.enableButtons();
+                set(array);
+            });
     }
 }
