@@ -1,4 +1,3 @@
-package com.company;
 
 public class CycleSort {
     public static void sort(int array[]){
@@ -40,8 +39,7 @@ public class CycleSort {
                     count++;
                 }
             }
-
-
         }
     }
+    
 }

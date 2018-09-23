@@ -1,4 +1,4 @@
-package com.company;
+import java.util.Arrays;
 
 import javafx.animation.FadeTransition;
 import javafx.animation.ParallelTransition;
@@ -12,7 +12,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.Text;
 import javafx.scene.text.TextAlignment;
 import javafx.util.Duration;
-import com.company.CycleSortJavaFX;
+
 
 public class CycleSortPane extends Pane {
     Integer[] array = new Integer[99];
@@ -30,6 +30,10 @@ public class CycleSortPane extends Pane {
     Text explain1 = new Text();
     Text explain2 = new Text();
     int smaller=0;
+    int county=0;
+    Integer[][] arrays=new Integer[99][9];
+    String moving[]=new String[99];
+    ParallelTransition[] parallelTransitions;
     public void set(Integer[] a){
         array = new Integer[99];
         array2 = new Integer[99];
@@ -96,7 +100,10 @@ public class CycleSortPane extends Pane {
         rightTop.setStartY(height/2+56);
         rightTop.setEndX(Math.floor((width/n))*n-3);
         rightTop.setEndY(height/2+53);
-        int curr2 = array[0];
+        int curr2=array[0];
+        if(moving[step]!=null) {
+        	curr2 = Integer.parseInt(moving[step]);
+        }
         int smaller2 = 0;
         for (int i = 1; i < n; i++) {
             if (array[i] < curr2) {
@@ -109,7 +116,7 @@ public class CycleSortPane extends Pane {
         if(smaller2==0){
 
         }
-        explain1.setText("The number of numbers here <= "+array[0]+" is: "+(smaller2));
+        explain1.setText("The number of numbers here <= "+curr2+" is: "+(smaller2));
         explain1.setY(height/2+72);
         explain1.setWrappingWidth(120);
         explain1.setX(Math.floor(width/n)*(((double) 0)+((double)(n+1))/2.0)-60);
@@ -117,24 +124,33 @@ public class CycleSortPane extends Pane {
         explain2.setY(height/2-102);
         explain2.setX(0);
         getChildren().addAll(line,leftTop,leftBottom,rightTop,rightBottom,explain1,explain2);
-        //getChildren().addAll(explain1);
-    }
-    public void play(double width,double  height) throws InterruptedException{
-        for(int i=0;i<n;i++){
-            System.out.println(""+array[i]);
+        if(texty==null) {
+        	texty = new Text((int) Math.floor(width/(2*n))-3,(int) height/2-40,"");
+        	current = new Rectangle(0,(int) height/2-60,(int) Math.floor(width/n),30);
         }
-        Text texty = new Text((int) Math.floor(width/(2*n))-3,(int) height/2-40,"");
-        Rectangle current = new Rectangle(0,(int) height/2-60,(int) Math.floor(width/n),30);
+        else{
+        	texty.setText(moving[step]);
+        }
         current.setFill(Color.YELLOW);
         current.setStroke(Color.BLACK);
         getChildren().addAll(current,texty);
+        //getChildren().addAll(explain1);
+    }
+    Text texty;
+    Rectangle current;
+    public void steps(double width,double  height) {
+    	step=0;
+    	for(int i=0;i<n;i++){
+            System.out.println(""+array[i]);
+        }
         TranslateTransition[] translateTransitions = new TranslateTransition[999];
         TranslateTransition[] translateTransitions2 = new TranslateTransition[999];
-        ParallelTransition[] parallelTransitions = new ParallelTransition[999];
-        SequentialTransition sequentialTransition = new SequentialTransition();
+        parallelTransitions = new ParallelTransition[999];
         int count = 0;
-        int county=0;
+        county=0;
         texty.setText(Integer.toString(array[0]));
+        moving[0]=Integer.toString(array[0]);
+        arrays[0]=Arrays.copyOf(array, array.length);
         for(int start=0;start<n-1;start++) {
             if(start!=0) {
                 parallelTransitions[county] = new ParallelTransition();
@@ -170,6 +186,7 @@ public class CycleSortPane extends Pane {
                 final int[] smaller2 = new int[1];
                 smaller2[0]=b;
                 final int f =smaller2[0];
+                moving[county+1]=text[b].getText();
                 parallelTransitions[county].setOnFinished(e -> {
                     texty.setText(text[b].getText());
                     starty.setX(Math.floor((width / (n))) * (b)+(width/(4*n)));
@@ -190,17 +207,17 @@ public class CycleSortPane extends Pane {
                     while (Integer.parseInt(texty.getText()) == Integer.parseInt(text[smaller2[0]].getText())) {
                         smaller2[0]++;
                     }
-                    explain1.setText("The number of numbers here <= "+array[smaller2[0]]+" is: "+(smaller2[0]-b));
+                    explain1.setText("The number of numbers here <= "+texty.getText()+" is: "+(smaller2[0]-b));
                     explain1.setWrappingWidth(110);
                     explain1.setX(Math.floor(width/n)*(((double) b)+((double)(n-b+1))/2.0)-60);
                     explain2.setText("Swap values with the element at index start+smaller = "+""+b+"+"+(smaller2[0]-b)+"="+(smaller2[0]));
                     explain2.setY(height/2-102);
                     explain2.setX(0);
+                    step++;
                 });
-
+                arrays[county+1]=Arrays.copyOf(array,array.length);
                 county++;
             }
-            System.out.println("array[start]: " + array[start]);
             int curr = array[start];
             smaller = start;
             for (int i = start + 1; i < n; i++) {
@@ -220,26 +237,8 @@ public class CycleSortPane extends Pane {
                 translateTransitions[county] = new TranslateTransition(Duration.millis(5000), current);
                 translateTransitions[county].setToX(((int) Math.floor((width / (n))) * (smaller)));
                 translateTransitions[county].pause();
-                translateTransitions[county].pause();
-                translateTransitions[county].pause();
-                translateTransitions[county].pause();
-                translateTransitions[county].pause();
-                translateTransitions[county].pause();
-                translateTransitions[county].pause();
-                translateTransitions[county].pause();
-                translateTransitions[county].pause();
-                translateTransitions[county].pause();
                 translateTransitions2[county] = new TranslateTransition(Duration.millis(5000), texty);
                 translateTransitions2[county].setToX(((int) Math.floor((width / (n))) * (smaller)));
-                translateTransitions2[county].pause();
-                translateTransitions2[county].pause();
-                translateTransitions2[county].pause();
-                translateTransitions2[county].pause();
-                translateTransitions2[county].pause();
-                translateTransitions2[county].pause();
-                translateTransitions2[county].pause();
-                translateTransitions2[county].pause();
-                translateTransitions2[county].pause();
                 translateTransitions2[county].pause();
                 parallelTransitions[county].getChildren().addAll(translateTransitions[county], translateTransitions2[county]);
                 final int z = smaller;
@@ -248,7 +247,7 @@ public class CycleSortPane extends Pane {
                 final int[] smaller2 = new int[1];
                 smaller2[0]=b;
                 int f = smaller2[0];
-
+                moving[county+1]=text[z].getText();
                 parallelTransitions[county].setOnFinished(e -> {
                     String temp = texty.getText();
                     texty.setText(""+text[z].getText());
@@ -261,16 +260,18 @@ public class CycleSortPane extends Pane {
                     while (Integer.parseInt(texty.getText()) == Integer.parseInt(text[smaller2[0]].getText())) {
                         smaller2[0]++;
                     }
-                    explain1.setText("The number of numbers here <= "+array[smaller2[0]]+" is: "+(smaller2[0]-b));
+                    explain1.setText("The number of numbers here <= "+texty.getText()+" is: "+(smaller2[0]-b));
                     explain1.setWrappingWidth(120);
                     explain1.setX(Math.floor(width/n)*(((double) b)+((double)(n-b+1))/2.0)-60);
                     explain2.setText("Swap values with the element at index start+smaller = "+""+b+"+"+(smaller2[0]-b)+"="+(smaller2[0]));
                     explain2.setY(height/2-102);
                     explain2.setX(0);
+                    step++;
                 });
                 int temp = curr;
                 curr = array[smaller];
                 array[smaller] = temp;
+                arrays[county+1]=Arrays.copyOf(array,array.length);
                 count++;
                 county++;
             }
@@ -289,26 +290,8 @@ public class CycleSortPane extends Pane {
                     translateTransitions[county] = new TranslateTransition(Duration.millis(5000), current);
                     translateTransitions[county].setToX(((int) Math.floor((width / (n))) * (smaller)));
                     translateTransitions[county].pause();
-                    translateTransitions[county].pause();
-                    translateTransitions[county].pause();
-                    translateTransitions[county].pause();
-                    translateTransitions[county].pause();
-                    translateTransitions[county].pause();
-                    translateTransitions[county].pause();
-                    translateTransitions[county].pause();
-                    translateTransitions[county].pause();
-                    translateTransitions[county].pause();
                     translateTransitions2[county] = new TranslateTransition(Duration.millis(5000), texty);
                     translateTransitions2[county].setToX(((int) Math.floor((width / (n))) * (smaller)));
-                    translateTransitions2[county].pause();
-                    translateTransitions2[county].pause();
-                    translateTransitions2[county].pause();
-                    translateTransitions2[county].pause();
-                    translateTransitions2[county].pause();
-                    translateTransitions2[county].pause();
-                    translateTransitions2[county].pause();
-                    translateTransitions2[county].pause();
-                    translateTransitions2[county].pause();
                     translateTransitions2[county].pause();
                     parallelTransitions[county].getChildren().addAll(translateTransitions[county], translateTransitions2[county]);
                     final int z = smaller;
@@ -317,11 +300,12 @@ public class CycleSortPane extends Pane {
                     final int[] smaller2 = new int[1];
                     smaller2[0] = b;
                     final int f = smaller2[0];
+                    moving[county+1]=text[z].getText();
                     parallelTransitions[county].setOnFinished(e -> {
+                    	smaller2[0] = b;
                         String temp = texty.getText();
                         texty.setText("" + text[z].getText());
                         text[z].setText(temp);
-                        System.out.println("smaller: "+z);
                         for (int i = b + 1; i < n; i++) {
                             if (Integer.parseInt(text[i].getText()) < Integer.parseInt(texty.getText())) {
                                 smaller2[0]++;
@@ -330,29 +314,57 @@ public class CycleSortPane extends Pane {
                         while (Integer.parseInt(texty.getText()) == Integer.parseInt(text[smaller2[0]].getText())) {
                             smaller2[0]++;
                         }
-                        explain1.setText("The number of numbers here <= "+array[smaller2[0]]+" is: "+(smaller2[0]-b));
+                        explain1.setText("The number of numbers here <= "+texty.getText()+" is: "+(smaller2[0]-b));
                         explain1.setWrappingWidth(120);
                         explain1.setX(Math.floor(width/n)*(((double) b)+((double)(n-b+1))/2.0)-60);
                         explain2.setText("Swap values with the element at index start+smaller = "+""+b+"+"+(smaller2[0]-b)+"="+(smaller2[0]));
                         explain2.setY(height/2-102);
                         explain2.setX(0);
+                        step++;
                     });
                     int temp = curr;
                     curr = array[smaller];
                     array[smaller] = temp;
+                    arrays[county+1]=Arrays.copyOf(array,array.length);
                     count++;
                     county++;
                 }
             }
         }
+    }
+    
+    SequentialTransition sequentialTransition;
+    int step=0;
+    
+    public void play() throws InterruptedException{
+    	sequentialTransition = new SequentialTransition();
             sequentialTransition = new SequentialTransition();
-            for(int i=0;i<county;i++){
+            for(int i=step;i<county;i++){
                 sequentialTransition.getChildren().add(parallelTransitions[i]);
             }
         sequentialTransition.play();
             sequentialTransition.setOnFinished(e->{
                 CycleSortJavaFX.enableButtons();
                 set(array);
+                CycleSortJavaFX.play.setText("Play");
             });
+    }
+    
+    public void pause() {
+    	sequentialTransition.pause();
+    }
+    
+    public void next() {
+    	if(step+1<county) {
+    		step++;
+    		set(arrays[step]);
+    	}
+    }
+    
+    public void previous() {
+    	if(step>0) {
+    		step--;
+    		set(arrays[step]);
+    	}
     }
 }
