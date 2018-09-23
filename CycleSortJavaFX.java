@@ -191,15 +191,18 @@ public class CycleSortJavaFX extends Application {
                cycleSortPane.set(a);
                cycleSortPane.show(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
                cycleSortPane.steps(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
+
+               cycleSortPane.resetRectangle();
                int index=0;
+               enableAllButtons();
             });
             previous.setOnAction(e -> {
             	cycleSortPane.previous();
-            	cycleSortPane.show(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
+            	//cycleSortPane.show(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
             });
             next.setOnAction(e -> {
             	cycleSortPane.next();
-            	cycleSortPane.show(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
+            	//cycleSortPane.show(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
             });
             hBox.setSpacing(20);
             hBox.setAlignment(Pos.CENTER);
@@ -217,22 +220,31 @@ public class CycleSortJavaFX extends Application {
             stage.setScene(scene);
             stage.setTitle("CycleSort");
             stage.show();
-         /*   Node divider = splitPane.lookup(".split-pane-divider");
+            Node divider = splitPane.lookup(".split-pane-divider");
             if(divider!=null){
                 divider.setStyle("-fx-background-color: transparent;");
             }
             splitPane.lookupAll(".split-pane-divider").stream()
                     .forEach(div ->  div.setMouseTransparent(true) );
-                    */
+
             cycleSortPane.show(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
             cycleSortPane.steps(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
         }
         static void enableButtons(){
             random.setDisable(false);
-            previous.setDisable(false);
-            next.setDisable(false);
         }
-
+        static void disableAllButtons(){
+            random.setDisable(true);
+            play.setDisable(true);
+            previous.setDisable(true);
+            next.setDisable(true);
+        }
+        static void enableAllButtons(){
+            random.setDisable(false);
+            play.setDisable(false);
+            next.setDisable(false);
+            previous.setDisable(false);
+        }
         public static void main(String[] args) {
             launch(args);
         }

@@ -1,9 +1,9 @@
+import java.sql.Time;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
-import javafx.animation.FadeTransition;
-import javafx.animation.ParallelTransition;
-import javafx.animation.SequentialTransition;
-import javafx.animation.TranslateTransition;
+import javafx.animation.*;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Line;
@@ -23,6 +23,8 @@ public class CycleSortPane extends Pane {
     Line rightTop=new Line();
     Line rightBottom = new Line();
     int n=0;
+    int steps=0;
+    String[] textys = new String[999];
     Text starty;
     Text[] numbering = new Text[99];
     Rectangle[] rectangles = new Rectangle[99];
@@ -30,8 +32,14 @@ public class CycleSortPane extends Pane {
     Text explain1 = new Text();
     Text explain2 = new Text();
     int smaller=0;
+    int smaller3=0;
+    int[] smallers = new int[99];
+    String[] currents = new String[99];
     int county=0;
+    List<Animation> transitions = new ArrayList<>();
+    double width,height;
     Integer[][] arrays=new Integer[99][9];
+    boolean[] isAnnoying = new boolean[999];
     String moving[]=new String[99];
     ParallelTransition[] parallelTransitions;
     public void set(Integer[] a){
@@ -55,6 +63,14 @@ public class CycleSortPane extends Pane {
             array2[i]=a[i];
             n++;
         }
+    }
+    public void resetRectangle(){
+        TranslateTransition tt = new TranslateTransition(Duration.millis(2),current);
+        tt.setToX(0);
+        TranslateTransition tt2 = new TranslateTransition(Duration.millis(2),texty);
+        tt2.setToX((int) Math.floor(Math.floor(width/(2*n))/2-Integer.toString(array2[0]).length()*3));
+        tt.play();
+        tt2.play();
     }
     public void show(double width,double height){
         this.getChildren().clear();
@@ -136,9 +152,43 @@ public class CycleSortPane extends Pane {
         getChildren().addAll(current,texty);
         //getChildren().addAll(explain1);
     }
+    public void showy(double width,double height){
+        getChildren().clear();
+        this.setMinHeight(height);
+        this.setMaxHeight(height);
+        this.setMinWidth(width);
+        this.setMaxWidth(width);
+        for(int i=0;i<n;i++){
+            rectangles[i] = new Rectangle((int) Math.floor((width/n))*i,(int) height/2,(int) Math.floor(width/n),30);
+            rectangles[i].setFill(Color.YELLOW);
+            rectangles[i].setStroke(Color.BLACK);
+            text[i] = new Text((int) (Math.floor((width/n))*i+Math.floor(width/n)/2-Integer.toString(array[i]).length()*3),(int) height/2+20,Integer.toString(array[i]));
+            text[i].setFont(Font.font("Segoe UI",12));
+            getChildren().addAll(rectangles[i],text[i]);
+        }
+        for(int i=0;i<n;i++){
+            numbering[i]=new Text(""+(i));
+            numbering[i].setX(Math.floor((width / (2*n)))+Math.floor((width / (n)))*i);
+            numbering[i].setY(height/2+42);
+            getChildren().add(numbering[i]);
+        }
+        if(texty==null) {
+            texty = new Text((int) Math.floor(width/(2*n))-3,(int) height/2-40,"");
+            current = new Rectangle(0,(int) height/2-60,(int) Math.floor(width/n),30);
+        }
+        else{
+            texty.setText(moving[step]);
+        }
+        current.setFill(Color.YELLOW);
+        current.setStroke(Color.BLACK);
+        getChildren().addAll(current,texty);
+    }
     Text texty;
     Rectangle current;
     public void steps(double width,double  height) {
+        currents[0]=Integer.toString(array[0]);
+        this.width=width;
+        this.height=height;
     	step=0;
     	for(int i=0;i<n;i++){
             System.out.println(""+array[i]);
@@ -156,8 +206,8 @@ public class CycleSortPane extends Pane {
                 parallelTransitions[county] = new ParallelTransition();
                 SequentialTransition sq = new SequentialTransition();
                 SequentialTransition sq2 = new SequentialTransition();
-                FadeTransition fadeTransition = new FadeTransition(Duration.millis(1000),current);
-                FadeTransition fadeTransition3 = new FadeTransition(Duration.millis(1000),current);
+                FadeTransition fadeTransition = new FadeTransition(Duration.millis(2495),current);
+                FadeTransition fadeTransition3 = new FadeTransition(Duration.millis(2495),current);
                 fadeTransition.setFromValue(1.0);
                 fadeTransition.setToValue(0.0);
                 fadeTransition.setCycleCount(1);
@@ -165,10 +215,11 @@ public class CycleSortPane extends Pane {
                 fadeTransition3.setToValue(1.0);
                 fadeTransition3.setCycleCount(1);
                 translateTransitions[county] = new TranslateTransition(Duration.millis(5),current);
+                translateTransitions[county].setFromX(((int) Math.floor((width / (n))) * (smaller3+1)));
                 translateTransitions[county].setToX(((int) Math.floor((width / (n))) * (start)));
                 translateTransitions[county].setCycleCount(1);
-                FadeTransition fadeTransition2 = new FadeTransition(Duration.millis(1000),texty);
-                FadeTransition fadeTransition4 = new FadeTransition(Duration.millis(1000),texty);
+                FadeTransition fadeTransition2 = new FadeTransition(Duration.millis(2495),texty);
+                FadeTransition fadeTransition4 = new FadeTransition(Duration.millis(2495),texty);
                 fadeTransition2.setFromValue(1.0);
                 fadeTransition2.setToValue(0.0);
                 fadeTransition2.setCycleCount(1);
@@ -176,6 +227,7 @@ public class CycleSortPane extends Pane {
                 fadeTransition4.setToValue(1.0);
                 fadeTransition4.setCycleCount(1);
                 translateTransitions2[county] = new TranslateTransition(Duration.millis(5),texty);
+                translateTransitions2[county].setFromX(((int) Math.floor((width / (n))) * (smaller3+1)));
                 translateTransitions2[county].setToX(((int) Math.floor((width / (n))) * (start)));
                 translateTransitions2[county].setCycleCount(1);
                 sq.getChildren().addAll(fadeTransition,translateTransitions[county],fadeTransition3);
@@ -216,7 +268,10 @@ public class CycleSortPane extends Pane {
                     step++;
                 });
                 arrays[county+1]=Arrays.copyOf(array,array.length);
+                currents[county+1]=text[b].getText();
+                isAnnoying[county]=true;
                 county++;
+                smaller3=smaller;
             }
             int curr = array[start];
             smaller = start;
@@ -235,9 +290,11 @@ public class CycleSortPane extends Pane {
             if (smaller != start) {
                 parallelTransitions[county] = new ParallelTransition();
                 translateTransitions[county] = new TranslateTransition(Duration.millis(5000), current);
+                translateTransitions[county].setFromX((int) Math.floor((width / (n))) * (smaller3));
                 translateTransitions[county].setToX(((int) Math.floor((width / (n))) * (smaller)));
                 translateTransitions[county].pause();
                 translateTransitions2[county] = new TranslateTransition(Duration.millis(5000), texty);
+                translateTransitions2[county].setFromX((int) Math.floor((width / (n))) * (smaller3));
                 translateTransitions2[county].setToX(((int) Math.floor((width / (n))) * (smaller)));
                 translateTransitions2[county].pause();
                 parallelTransitions[county].getChildren().addAll(translateTransitions[county], translateTransitions2[county]);
@@ -272,8 +329,12 @@ public class CycleSortPane extends Pane {
                 curr = array[smaller];
                 array[smaller] = temp;
                 arrays[county+1]=Arrays.copyOf(array,array.length);
+                currents[county+1]=text[z].getText();
+                smallers[county+1]=smaller;
                 count++;
+                isAnnoying[county]=false;
                 county++;
+                smaller3=smaller;
             }
             while (smaller != start) {
                 smaller = start;
@@ -288,9 +349,11 @@ public class CycleSortPane extends Pane {
                 if (curr != array[smaller]) {
                     parallelTransitions[county] = new ParallelTransition();
                     translateTransitions[county] = new TranslateTransition(Duration.millis(5000), current);
+                    translateTransitions[county].setFromX((int) Math.floor((width / (n))) * (smaller3));
                     translateTransitions[county].setToX(((int) Math.floor((width / (n))) * (smaller)));
                     translateTransitions[county].pause();
                     translateTransitions2[county] = new TranslateTransition(Duration.millis(5000), texty);
+                    translateTransitions2[county].setFromX((int) Math.floor((width / (n))) * (smaller3));
                     translateTransitions2[county].setToX(((int) Math.floor((width / (n))) * (smaller)));
                     translateTransitions2[county].pause();
                     parallelTransitions[county].getChildren().addAll(translateTransitions[county], translateTransitions2[county]);
@@ -326,8 +389,12 @@ public class CycleSortPane extends Pane {
                     curr = array[smaller];
                     array[smaller] = temp;
                     arrays[county+1]=Arrays.copyOf(array,array.length);
+                    currents[county+1]=text[z].getText();
+                    smallers[county+1]=smaller;
                     count++;
+                    isAnnoying[county]=false;
                     county++;
+                    smaller3=smaller;
                 }
             }
         }
@@ -344,7 +411,7 @@ public class CycleSortPane extends Pane {
             }
         sequentialTransition.play();
             sequentialTransition.setOnFinished(e->{
-                CycleSortJavaFX.enableButtons();
+                CycleSortJavaFX.enableAllButtons();
                 set(array);
                 CycleSortJavaFX.play.setText("Play");
             });
@@ -353,18 +420,55 @@ public class CycleSortPane extends Pane {
     public void pause() {
     	sequentialTransition.pause();
     }
-    
     public void next() {
-    	if(step+1<county) {
-    		step++;
-    		set(arrays[step]);
-    	}
+        String x = texty.getText();
+        textys[steps]=x;
+        for(int i=0;i<county;i++){
+            System.out.println(isAnnoying[i]);
+        }
+        if(steps<=county) {
+            CycleSortJavaFX.disableAllButtons();
+            set(arrays[(steps)]);
+            if(isAnnoying[steps]==false) {
+                show(width,height);
+                texty.setText(currents[steps]);
+                parallelTransitions[steps].play();
+            }
+            else{
+                showy(width,height);
+                texty.setText(x);
+                parallelTransitions[steps].play();
+            }
+            PauseTransition pauseTransition = new PauseTransition(Duration.millis(5000));
+            pauseTransition.setOnFinished(e->{
+                CycleSortJavaFX.enableAllButtons();
+            });
+            pauseTransition.play();
+            steps++;
+        }
     }
     
     public void previous() {
-    	if(step>0) {
-    		step--;
-    		set(arrays[step]);
-    	}
+        if(steps!=0 && steps!=1 && steps<=county) {
+            CycleSortJavaFX.disableAllButtons();
+            System.out.println("nani: "+currents[steps-2]);
+            set(arrays[(steps - 2)]);
+            if(isAnnoying[steps]==false) {
+                show(width,height);
+                texty.setText(currents[steps - 2]);
+            }
+            else{
+                showy(width,height);
+                texty.setText(textys[steps-2]);
+            }
+            parallelTransitions[steps-2].play();
+            PauseTransition pauseTransition = new PauseTransition(Duration.millis(5000));
+            pauseTransition.setOnFinished(e->{
+                CycleSortJavaFX.enableAllButtons();
+            });
+            pauseTransition.play();
+            steps--;
+        }
+
     }
 }
