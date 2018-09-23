@@ -191,6 +191,7 @@ public class CycleSortJavaFX extends Application {
                cycleSortPane.set(a);
                cycleSortPane.show(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
                cycleSortPane.steps(Screen.getPrimary().getVisualBounds().getWidth()/2.6,Screen.getPrimary().getVisualBounds().getHeight()/1.3-buttonHeight-70);
+
                cycleSortPane.resetRectangle();
                int index=0;
                enableAllButtons();
