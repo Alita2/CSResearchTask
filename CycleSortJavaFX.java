@@ -215,7 +215,7 @@ public class CycleSortJavaFX extends Application {
             stage.setHeight(Screen.getPrimary().getVisualBounds().getHeight()/1.3);
             stage.setResizable(false);
             stage.setScene(scene);
-            stage.setTitle("Simple JavaFX Program");
+            stage.setTitle("CycleSort");
             stage.show();
          /*   Node divider = splitPane.lookup(".split-pane-divider");
             if(divider!=null){
